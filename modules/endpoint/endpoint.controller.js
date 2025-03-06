@@ -48,7 +48,8 @@ function handleWebhookData(req, res) {
         req.body.entry.forEach((entry) => {
             entry.changes.forEach((change) => {
                 if (change.field === "feed") {
-                    handlePageFeedEvent(change.value);
+                    console.log(change.value, "||||||||||||||||||||||||||||||||||||||||||| +++++++++++++++++++");
+                    // handlePageFeedEvent(change.value);
                 }
             });
         });
