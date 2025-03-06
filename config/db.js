@@ -16,7 +16,8 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 // const MONGO_URI = "mongodb+srv://pingoo:AwRlQKJJxwTYnP4l@cluster0.tzceu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"; // MongoDB URI
-const MONGO_URI = "mongodb://127.0.0.1:27017/engageXpart"; // MongoDB URI
+// const MONGO_URI = "mongodb://127.0.0.1:27017/engageXpart"; // MongoDB URI
+const MONGO_URI = "mongodb+srv://tausifabid1:No28lnHjUTmgOPVE@cluster0.c0knw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"; // MongoDB URI
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield mongoose_1.default.connect(MONGO_URI);
