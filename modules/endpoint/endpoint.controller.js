@@ -23,37 +23,47 @@ const APP_SECRET = "07edcf372dc928b170fc3f1a15d70c5b"; // Found in Meta Develope
 const PAGE_ACCESS_TOKEN = "EAAFzFylf8lMBOyzypGsnMVQTJbahntZAp1qVXPMvyqIMGFfjbVyIVpS8zZBqOZCmd9Cceqbsec49oudMarvg6QsLKAOtpAR6xm9oZA3E36Ni1FwMsI80nv30ghGMHPZCwlVlD2w1DqwHVnp02kY85SSPJi1oBHcar2ICUwBhZBX7O1TJyZCFGmiOFZCincPhkt2blhDSe3Kc46iLeMww0RGCHusVfqiUBl2YyCZCbs3kI"; // Page Access Token from Meta Developer Console
 // Webhook Verification
 function verifyWebhook(req, res) {
-    const mode = req.query["hub.mode"];
-    const token = req.query["hub.verify_token"];
-    const challenge = req.query["hub.challenge"];
+    let mode = req.query["hub.mode"];
+    let token = req.query["hub.verify_token"];
+    let challenge = req.query["hub.challenge"];
     if (mode === "subscribe" && token === VERIFY_TOKEN) {
-        console.log("Webhook verified successfully!");
+        console.log("WEBHOOK_VERIFIED");
         res.status(200).send(challenge);
     }
     else {
-        console.error("Webhook verification failed.");
         res.sendStatus(403);
     }
 }
 // Handle Webhook Data (Page Events)
 function handleWebhookData(req, res) {
-    const signature = req.headers["x-hub-signature-256"];
-    if (!verifySignature(req.body, signature)) {
-        console.error("Invalid signature, request rejected.");
-        // return res.sendStatus(403);
-    }
-    console.log("Webhook received:", JSON.stringify(req.body, null, 2));
-    // Process Webhook Event
-    if (req.body.object === "page") {
-        req.body.entry.forEach((entry) => {
-            entry.changes.forEach((change) => {
-                if (change.field === "feed") {
-                    console.log(change.value, "||||||||||||||||||||||||||||||||||||||||||| +++++++++++++++++++");
-                    // handlePageFeedEvent(change.value);
-                }
-            });
+    let body = req.body;
+    if (body.object === "page") {
+        body.entry.forEach((entry) => {
+            let webhookEvent = entry.changes[0];
+            console.log("Webhook event:", webhookEvent);
         });
+        res.status(200).send("EVENT_RECEIVED");
     }
+    else {
+        res.sendStatus(404);
+    }
+    // const signature = req.headers["x-hub-signature-256"] as string;
+    // if (!verifySignature(req.body, signature)) {
+    //     console.error("Invalid signature, request rejected.");
+    //     // return res.sendStatus(403);
+    // }
+    // console.log("Webhook received:", JSON.stringify(req.body, null, 2));
+    // // Process Webhook Event
+    // if (req.body.object === "page") {
+    //     req.body.entry.forEach((entry: any) => {
+    //         entry.changes.forEach((change: any) => {
+    //             if (change.field === "feed") {
+    //                 console.log(change.value, "||||||||||||||||||||||||||||||||||||||||||| +++++++++++++++++++")
+    //                 // handlePageFeedEvent(change.value);
+    //             }
+    //         });
+    //     });
+    // }
     res.sendStatus(200);
 }
 // Handle Page Feed Events (Posts, Comments, Likes)
