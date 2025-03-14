@@ -20,8 +20,18 @@ const createProductInDb = (data) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.createProductInDb = createProductInDb;
 // Get all Products
-const getProductsFromDb = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield product_model_1.default.find();
+const getProductsFromDb = (name, categoryName, categoryId) => __awaiter(void 0, void 0, void 0, function* () {
+    const filter = {};
+    if (name) {
+        filter.name = { $regex: name, $options: "i" };
+    }
+    if (categoryName) {
+        filter.categoryName = { $regex: categoryName, $options: "i" };
+    }
+    if ((categoryId === null || categoryId === void 0 ? void 0 : categoryId.length) && (categoryId === null || categoryId === void 0 ? void 0 : categoryId.length) > 2) {
+        filter.categoryId = categoryId;
+    }
+    return yield product_model_1.default.find(filter);
 });
 exports.getProductsFromDb = getProductsFromDb;
 // Get a single Product by ID

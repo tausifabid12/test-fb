@@ -9,15 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProduct = exports.updateProduct = exports.getProductById = exports.getProducts = exports.createProduct = void 0;
-const product_service_1 = require("./product.service");
-// Create a new Product
-const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.deleteLead = exports.updateLead = exports.getLeadById = exports.getLeads = exports.createLead = void 0;
+const leads_service_1 = require("./leads.service");
+// Create a new Lead
+const createLead = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Product = yield (0, product_service_1.createProductInDb)(req.body);
+        const Lead = yield (0, leads_service_1.createLeadInDb)(req.body);
         res.status(201).json({
             success: true,
-            data: Product
+            data: Lead
         });
     }
     catch (error) {
@@ -25,63 +25,63 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(400).json({ message: "Error creating ", error });
     }
 });
-exports.createProduct = createProduct;
-// Get all Products
-const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.createLead = createLead;
+// Get all Leads
+const getLeads = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { categoryId, categoryName, name } = req.query;
-        const Products = yield (0, product_service_1.getProductsFromDb)(name, categoryName, categoryId);
+        const Leads = yield (0, leads_service_1.getLeadsFromDb)(name, categoryName, categoryId);
         res.status(201).json({
             success: true,
-            data: Products
+            data: Leads
         });
     }
     catch (error) {
         res.status(500).json({ message: "Error fetching s", error });
     }
 });
-exports.getProducts = getProducts;
-// Get a single Product by ID
-const getProductById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getLeads = getLeads;
+// Get a single Lead by ID
+const getLeadById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Product = yield (0, product_service_1.getProductByIdFromDb)(req.params.id);
-        if (!Product) {
+        const Lead = yield (0, leads_service_1.getLeadByIdFromDb)(req.params.id);
+        if (!Lead) {
             res.status(404).json({ message: "User flow not found" });
             return;
         }
         res.status(201).json({
             success: true,
-            data: Product
+            data: Lead
         });
     }
     catch (error) {
         res.status(500).json({ message: "Error fetching ", error });
     }
 });
-exports.getProductById = getProductById;
-// Update a Product by ID
-const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getLeadById = getLeadById;
+// Update a Lead by ID
+const updateLead = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Product = yield (0, product_service_1.updateProductInDb)(req.params.id, req.body);
-        if (!Product) {
+        const Lead = yield (0, leads_service_1.updateLeadInDb)(req.params.id, req.body);
+        if (!Lead) {
             res.status(404).json({ message: "User flow not found" });
             return;
         }
         res.status(201).json({
             success: true,
-            data: Product
+            data: Lead
         });
     }
     catch (error) {
         res.status(500).json({ message: "Error updating ", error });
     }
 });
-exports.updateProduct = updateProduct;
-// Delete a Product by ID
-const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.updateLead = updateLead;
+// Delete a Lead by ID
+const deleteLead = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Product = yield (0, product_service_1.deleteProductFromDb)(req.params.id);
-        if (!Product) {
+        const Lead = yield (0, leads_service_1.deleteLeadFromDb)(req.params.id);
+        if (!Lead) {
             res.status(404).json({ message: "User flow not found" });
             return;
         }
@@ -91,4 +91,4 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(500).json({ message: "Error deleting ", error });
     }
 });
-exports.deleteProduct = deleteProduct;
+exports.deleteLead = deleteLead;

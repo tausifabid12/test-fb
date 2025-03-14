@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = exports.findUserByPhone = exports.findUserByEmail = void 0;
+exports.deleteUserFromDb = exports.updateUserInDb = exports.createUser = exports.findUserByPhone = exports.findUserByEmail = void 0;
 const user_model_1 = __importDefault(require("./user.model"));
 /**
  * Find a user by email
@@ -24,7 +24,8 @@ const findUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.findUserByEmail = findUserByEmail;
 const findUserByPhone = (phone) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield user_model_1.default.findOne({ phone });
+    console.log(phone, 'IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII');
+    return yield user_model_1.default.find({ phone });
 });
 exports.findUserByPhone = findUserByPhone;
 /**
@@ -34,16 +35,17 @@ exports.findUserByPhone = findUserByPhone;
  * @param password - Plain text password
  * @returns Created user object
  */
-const createUser = (_a) => __awaiter(void 0, [_a], void 0, function* ({ userId, name, email, phone, password, businessName, businessDescription, isARetailer }) {
-    return yield user_model_1.default.create({
-        userId,
-        name,
-        email,
-        phone,
-        password,
-        businessName,
-        businessDescription,
-        isARetailer
-    });
+const createUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield user_model_1.default.create(payload);
 });
 exports.createUser = createUser;
+// Update a Product by ID
+const updateUserInDb = (userId, data) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield user_model_1.default.findOneAndUpdate({ userId }, data, { new: true });
+});
+exports.updateUserInDb = updateUserInDb;
+// Delete a Product by ID
+const deleteUserFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield user_model_1.default.findByIdAndDelete(id);
+});
+exports.deleteUserFromDb = deleteUserFromDb;

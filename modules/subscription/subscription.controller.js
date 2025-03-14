@@ -18,7 +18,7 @@ const createSubscription = (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.status(201).json(Subscription);
     }
     catch (error) {
-        res.status(400).json({ message: "Error creating user flow", error });
+        res.status(400).json({ message: "Error creating ", error });
     }
 });
 exports.createSubscription = createSubscription;
@@ -29,7 +29,7 @@ const getSubscriptions = (_req, res) => __awaiter(void 0, void 0, void 0, functi
         res.json(Subscriptions);
     }
     catch (error) {
-        res.status(500).json({ message: "Error fetching user flows", error });
+        res.status(500).json({ message: "Error fetching s", error });
     }
 });
 exports.getSubscriptions = getSubscriptions;
@@ -44,7 +44,7 @@ const getSubscriptionById = (req, res) => __awaiter(void 0, void 0, void 0, func
         res.json(Subscription);
     }
     catch (error) {
-        res.status(500).json({ message: "Error fetching user flow", error });
+        res.status(500).json({ message: "Error fetching ", error });
     }
 });
 exports.getSubscriptionById = getSubscriptionById;
@@ -59,7 +59,7 @@ const updateSubscription = (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.json(Subscription);
     }
     catch (error) {
-        res.status(500).json({ message: "Error updating user flow", error });
+        res.status(500).json({ message: "Error updating ", error });
     }
 });
 exports.updateSubscription = updateSubscription;
@@ -74,7 +74,7 @@ const deleteSubscription = (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.json({ message: "User flow deleted successfully" });
     }
     catch (error) {
-        res.status(500).json({ message: "Error deleting user flow", error });
+        res.status(500).json({ message: "Error deleting ", error });
     }
 });
 exports.deleteSubscription = deleteSubscription;

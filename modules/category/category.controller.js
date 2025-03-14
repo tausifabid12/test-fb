@@ -21,7 +21,7 @@ const createCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
     catch (error) {
-        res.status(400).json({ message: "Error creating user flow", error });
+        res.status(400).json({ message: "Error creating ", error });
     }
 });
 exports.createCategory = createCategory;
@@ -35,7 +35,7 @@ const getCategorys = (_req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
     catch (error) {
-        res.status(500).json({ message: "Error fetching user flows", error });
+        res.status(500).json({ message: "Error fetching s", error });
     }
 });
 exports.getCategorys = getCategorys;
@@ -53,7 +53,7 @@ const getCategoryById = (req, res) => __awaiter(void 0, void 0, void 0, function
         });
     }
     catch (error) {
-        res.status(500).json({ message: "Error fetching user flow", error });
+        res.status(500).json({ message: "Error fetching ", error });
     }
 });
 exports.getCategoryById = getCategoryById;
@@ -71,7 +71,7 @@ const updateCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
     catch (error) {
-        res.status(500).json({ message: "Error updating user flow", error });
+        res.status(500).json({ message: "Error updating ", error });
     }
 });
 exports.updateCategory = updateCategory;
@@ -86,7 +86,7 @@ const deleteCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.json({ message: "User flow deleted successfully" });
     }
     catch (error) {
-        res.status(500).json({ message: "Error deleting user flow", error });
+        res.status(500).json({ message: "Error deleting ", error });
     }
 });
 exports.deleteCategory = deleteCategory;

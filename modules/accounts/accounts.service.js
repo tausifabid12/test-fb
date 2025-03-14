@@ -20,8 +20,12 @@ const createAccountInDb = (data) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.createAccountInDb = createAccountInDb;
 // Get all Accounts
-const getAccountsFromDb = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield accounts_model_1.default.find();
+const getAccountsFromDb = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    let query = {};
+    if (userId) {
+        query.userId = userId;
+    }
+    return yield accounts_model_1.default.find(query);
 });
 exports.getAccountsFromDb = getAccountsFromDb;
 // Get a single Account by ID

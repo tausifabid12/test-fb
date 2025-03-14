@@ -9,15 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProduct = exports.updateProduct = exports.getProductById = exports.getProducts = exports.createProduct = void 0;
-const product_service_1 = require("./product.service");
-// Create a new Product
-const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.deleteAdminLead = exports.updateAdminLead = exports.getAdminLeadById = exports.getAdminLeads = exports.createAdminLead = void 0;
+const adminLeads_service_1 = require("./adminLeads.service");
+// Create a new AdminLead
+const createAdminLead = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Product = yield (0, product_service_1.createProductInDb)(req.body);
+        const AdminLead = yield (0, adminLeads_service_1.createAdminLeadInDb)(req.body);
         res.status(201).json({
             success: true,
-            data: Product
+            data: AdminLead
         });
     }
     catch (error) {
@@ -25,63 +25,63 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(400).json({ message: "Error creating ", error });
     }
 });
-exports.createProduct = createProduct;
-// Get all Products
-const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.createAdminLead = createAdminLead;
+// Get all AdminLeads
+const getAdminLeads = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { categoryId, categoryName, name } = req.query;
-        const Products = yield (0, product_service_1.getProductsFromDb)(name, categoryName, categoryId);
+        const AdminLeads = yield (0, adminLeads_service_1.getAdminLeadsFromDb)(name, categoryName, categoryId);
         res.status(201).json({
             success: true,
-            data: Products
+            data: AdminLeads
         });
     }
     catch (error) {
         res.status(500).json({ message: "Error fetching s", error });
     }
 });
-exports.getProducts = getProducts;
-// Get a single Product by ID
-const getProductById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getAdminLeads = getAdminLeads;
+// Get a single AdminLead by ID
+const getAdminLeadById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Product = yield (0, product_service_1.getProductByIdFromDb)(req.params.id);
-        if (!Product) {
+        const AdminLead = yield (0, adminLeads_service_1.getAdminLeadByIdFromDb)(req.params.id);
+        if (!AdminLead) {
             res.status(404).json({ message: "User flow not found" });
             return;
         }
         res.status(201).json({
             success: true,
-            data: Product
+            data: AdminLead
         });
     }
     catch (error) {
         res.status(500).json({ message: "Error fetching ", error });
     }
 });
-exports.getProductById = getProductById;
-// Update a Product by ID
-const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getAdminLeadById = getAdminLeadById;
+// Update a AdminLead by ID
+const updateAdminLead = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Product = yield (0, product_service_1.updateProductInDb)(req.params.id, req.body);
-        if (!Product) {
+        const AdminLead = yield (0, adminLeads_service_1.updateAdminLeadInDb)(req.params.id, req.body);
+        if (!AdminLead) {
             res.status(404).json({ message: "User flow not found" });
             return;
         }
         res.status(201).json({
             success: true,
-            data: Product
+            data: AdminLead
         });
     }
     catch (error) {
         res.status(500).json({ message: "Error updating ", error });
     }
 });
-exports.updateProduct = updateProduct;
-// Delete a Product by ID
-const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.updateAdminLead = updateAdminLead;
+// Delete a AdminLead by ID
+const deleteAdminLead = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Product = yield (0, product_service_1.deleteProductFromDb)(req.params.id);
-        if (!Product) {
+        const AdminLead = yield (0, adminLeads_service_1.deleteAdminLeadFromDb)(req.params.id);
+        if (!AdminLead) {
             res.status(404).json({ message: "User flow not found" });
             return;
         }
@@ -91,4 +91,4 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(500).json({ message: "Error deleting ", error });
     }
 });
-exports.deleteProduct = deleteProduct;
+exports.deleteAdminLead = deleteAdminLead;

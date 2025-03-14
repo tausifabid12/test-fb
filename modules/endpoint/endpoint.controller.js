@@ -1,7 +1,23 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyWebhook = verifyWebhook;
 exports.handleWebhookData = handleWebhookData;
+const automation_model_1 = __importDefault(require("../automation/automation.model"));
+const accounts_model_1 = __importDefault(require("../accounts/accounts.model"));
+const endpoint_helper_1 = require("./endpoint.helper");
+const getRandomItemFromArray_1 = require("../../helpers/getRandomItemFromArray");
 const VERIFY_TOKEN = "your_verify_token"; // Set this in App Dashboard
 const APP_SECRET = "07edcf372dc928b170fc3f1a15d70c5b"; // Found in Meta Developer Console
 // const APP_SECRET = "60e1159df179ff58ea6d1ca4596a0723"; // Found in Meta Developer Console
@@ -24,10 +40,54 @@ function handleWebhookData(req, res) {
     let body = req.body;
     console.log(req.body);
     if (body.object === "page") {
-        body.entry.forEach((entry) => {
-            // let webhookEvent = entry.changes[0];
+        body.entry.forEach((entry) => __awaiter(this, void 0, void 0, function* () {
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s;
+            console.log(entry);
+            console.log((entry === null || entry === void 0 ? void 0 : entry.length) ? entry[0] : '===========================');
+            //  ================================ handle comment reply==============
+            if ((_a = entry.changes) === null || _a === void 0 ? void 0 : _a.length) {
+                let webhookEvent = entry.changes[0];
+                console.log(webhookEvent, 'PPPPPPPPPPPPPPPPPP');
+                if ((webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.field) == 'feed' && ((_b = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _b === void 0 ? void 0 : _b.item) == 'comment') {
+                    let customerId = (_d = (_c = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _c === void 0 ? void 0 : _c.from) === null || _d === void 0 ? void 0 : _d.id;
+                    let customerName = (_f = (_e = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _e === void 0 ? void 0 : _e.from) === null || _f === void 0 ? void 0 : _f.name;
+                    let comment = (_g = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _g === void 0 ? void 0 : _g.message;
+                    let comment_id = (_h = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _h === void 0 ? void 0 : _h.comment_id;
+                    let post_id = (_j = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _j === void 0 ? void 0 : _j.post_id;
+                    //============= find automation
+                    const automation = yield automation_model_1.default.find({ postId: post_id });
+                    let userId = (_k = automation[0]) === null || _k === void 0 ? void 0 : _k.userId;
+                    let pageId = (_l = automation[0]) === null || _l === void 0 ? void 0 : _l.pageId;
+                    let replies = (_m = automation[0]) === null || _m === void 0 ? void 0 : _m.commentReplies;
+                    let outOfStockReplies = (_o = automation[0]) === null || _o === void 0 ? void 0 : _o.outOfStockReplies;
+                    let automationType = (_p = automation[0]) === null || _p === void 0 ? void 0 : _p.automationType;
+                    let productsIds = (_q = automation[0]) === null || _q === void 0 ? void 0 : _q.productsIds;
+                    let keywords = (_r = automation[0]) === null || _r === void 0 ? void 0 : _r.keywords;
+                    let replyMessageArray = replies;
+                    if (automationType == 'Product_automation') {
+                        let isStockAvailable = (0, endpoint_helper_1.checkProductStock)(productsIds);
+                        console.log(isStockAvailable, 'accountData');
+                        if (!isStockAvailable) {
+                            replyMessageArray = outOfStockReplies;
+                        }
+                    }
+                    // ========= find user account for access token
+                    let accountData = yield accounts_model_1.default.find({ userId });
+                    console.log(accountData, 'accountData');
+                    let accessToken = (_s = accountData[0]) === null || _s === void 0 ? void 0 : _s.accessToken;
+                    // ================ get all pages with page access token
+                    const pageData = yield (0, endpoint_helper_1.getPagesToken)(accessToken, pageId);
+                    const pageAccessToken = pageData === null || pageData === void 0 ? void 0 : pageData.access_token;
+                    console.log(pageAccessToken, 'pageAccessToken');
+                    let randomReplyMessage = (0, getRandomItemFromArray_1.getRandomItem)(replyMessageArray);
+                    console.log(randomReplyMessage, 'randomReplyMessage');
+                    // ================ reply to comment
+                    const result = yield (0, endpoint_helper_1.replyToComment)(pageAccessToken, comment_id, randomReplyMessage);
+                    console.log(result, '||||||||||||| ++++++++++++++++++ |||||||||||||||');
+                }
+            }
             console.log("Webhook event:", entry);
-        });
+        }));
         res.status(200).send("EVENT_RECEIVED");
     }
     else {

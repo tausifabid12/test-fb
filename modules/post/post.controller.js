@@ -18,7 +18,7 @@ const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(201).json(Post);
     }
     catch (error) {
-        res.status(400).json({ message: "Error creating user flow", error });
+        res.status(400).json({ message: "Error creating ", error });
     }
 });
 exports.createPost = createPost;
@@ -29,7 +29,7 @@ const getPosts = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json(Posts);
     }
     catch (error) {
-        res.status(500).json({ message: "Error fetching user flows", error });
+        res.status(500).json({ message: "Error fetching s", error });
     }
 });
 exports.getPosts = getPosts;
@@ -44,7 +44,7 @@ const getPostById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.json(Post);
     }
     catch (error) {
-        res.status(500).json({ message: "Error fetching user flow", error });
+        res.status(500).json({ message: "Error fetching ", error });
     }
 });
 exports.getPostById = getPostById;
@@ -59,7 +59,7 @@ const updatePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.json(Post);
     }
     catch (error) {
-        res.status(500).json({ message: "Error updating user flow", error });
+        res.status(500).json({ message: "Error updating ", error });
     }
 });
 exports.updatePost = updatePost;
@@ -74,7 +74,7 @@ const deletePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.json({ message: "User flow deleted successfully" });
     }
     catch (error) {
-        res.status(500).json({ message: "Error deleting user flow", error });
+        res.status(500).json({ message: "Error deleting ", error });
     }
 });
 exports.deletePost = deletePost;

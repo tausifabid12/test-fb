@@ -18,18 +18,19 @@ const createAccount = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(201).json(Account);
     }
     catch (error) {
-        res.status(400).json({ message: "Error creating user flow", error });
+        res.status(400).json({ message: "Error creating ", error });
     }
 });
 exports.createAccount = createAccount;
 // Get all Accounts
-const getAccounts = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getAccounts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Accounts = yield (0, accounts_service_1.getAccountsFromDb)();
+        const { userId } = req.query;
+        const Accounts = yield (0, accounts_service_1.getAccountsFromDb)(userId);
         res.json(Accounts);
     }
     catch (error) {
-        res.status(500).json({ message: "Error fetching user flows", error });
+        res.status(500).json({ message: "Error fetching s", error });
     }
 });
 exports.getAccounts = getAccounts;
@@ -44,7 +45,7 @@ const getAccountById = (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.json(Account);
     }
     catch (error) {
-        res.status(500).json({ message: "Error fetching user flow", error });
+        res.status(500).json({ message: "Error fetching ", error });
     }
 });
 exports.getAccountById = getAccountById;
@@ -59,7 +60,7 @@ const updateAccount = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.json(Account);
     }
     catch (error) {
-        res.status(500).json({ message: "Error updating user flow", error });
+        res.status(500).json({ message: "Error updating ", error });
     }
 });
 exports.updateAccount = updateAccount;
@@ -74,7 +75,7 @@ const deleteAccount = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.json({ message: "User flow deleted successfully" });
     }
     catch (error) {
-        res.status(500).json({ message: "Error deleting user flow", error });
+        res.status(500).json({ message: "Error deleting ", error });
     }
 });
 exports.deleteAccount = deleteAccount;

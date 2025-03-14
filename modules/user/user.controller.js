@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsers = exports.loginUser = exports.registerUser = void 0;
+exports.deleteUser = exports.updateUser = exports.getUsers = exports.loginUser = exports.registerUser = void 0;
 const user_service_1 = require("./user.service");
 const jwt_1 = require("../../utils/jwt");
 const user_model_1 = __importDefault(require("./user.model"));
@@ -21,6 +21,7 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
  * Register a new user
  */
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
         const { name, email, phone, password, businessName, businessDescription, isARetailer } = req.body;
         // Check if email already exists
@@ -31,28 +32,19 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         }
         // Check if phone number already exists
         const existingPhoneUser = yield (0, user_service_1.findUserByPhone)(phone);
-        if (existingPhoneUser) {
+        if ((_a = existingPhoneUser[0]) === null || _a === void 0 ? void 0 : _a.userId) {
             res.status(400).json({ message: "Phone number is already registered" });
             return;
         }
         // Ensure all required fields are present
-        if (!name || !email || !phone || !password || businessName === undefined || isARetailer === undefined) {
+        if (!name || !email || !phone || !password) {
             res.status(400).json({ message: "Missing required fields" });
             return;
         }
         const salt = yield bcryptjs_1.default.genSalt(10);
         const hashedPassword = yield bcryptjs_1.default.hash(password, salt);
         // Create user
-        const user = yield (0, user_service_1.createUser)({
-            userId: `EX${phone}`,
-            name,
-            email,
-            phone,
-            password: hashedPassword,
-            businessName,
-            businessDescription,
-            isARetailer
-        });
+        const user = yield (0, user_service_1.createUser)(Object.assign(Object.assign({}, req.body), { userId: `EX${phone}`, password: hashedPassword }));
         // Generate JWT token
         const token = (0, jwt_1.generateToken)(user.userId, user === null || user === void 0 ? void 0 : user.email);
         res.status(201).json({
@@ -67,24 +59,27 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.registerUser = registerUser;
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
         const { identifier, password } = req.body; // identifier can be email or phone
+        console.log(identifier, password, "{{{{{{{{{{{{{{{{{{{{{{{{{{");
         // Check if the user exists (by email or phone)
         const user = identifier.includes("@")
             ? yield (0, user_service_1.findUserByEmail)(identifier)
             : yield (0, user_service_1.findUserByPhone)(identifier);
+        console.log(user, '{{{{{{{{{{{{{{{{{{{');
         if (!user) {
             res.status(400).json({ message: "Invalid credentials" });
             return;
         }
         // Verify password
-        const isMatch = yield bcryptjs_1.default.compare(password, user.password);
+        const isMatch = yield bcryptjs_1.default.compare(password, user[0].password);
         if (!isMatch) {
             res.status(400).json({ message: "Invalid credentials" });
             return;
         }
         // Generate JWT token
-        const token = (0, jwt_1.generateToken)(user.userId, user === null || user === void 0 ? void 0 : user.email);
+        const token = (0, jwt_1.generateToken)(user[0].userId, (_a = user[0]) === null || _a === void 0 ? void 0 : _a.email);
         res.status(200).json({
             success: true,
             data: user,
@@ -152,3 +147,36 @@ const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getUsers = getUsers;
+// Update a Product by ID
+const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const Product = yield (0, user_service_1.updateUserInDb)(req.params.id, req.body);
+        if (!Product) {
+            res.status(404).json({ message: "User  not found" });
+            return;
+        }
+        res.status(201).json({
+            success: true,
+            data: Product
+        });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error updating ", error });
+    }
+});
+exports.updateUser = updateUser;
+// Delete a Product by ID
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const Product = yield (0, user_service_1.deleteUserFromDb)(req.params.id);
+        if (!Product) {
+            res.status(404).json({ message: "User  not found" });
+            return;
+        }
+        res.json({ message: " deleted successfully" });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error deleting ", error });
+    }
+});
+exports.deleteUser = deleteUser;

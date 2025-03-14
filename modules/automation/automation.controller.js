@@ -9,15 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProduct = exports.updateProduct = exports.getProductById = exports.getProducts = exports.createProduct = void 0;
-const product_service_1 = require("./product.service");
-// Create a new Product
-const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.deleteAutomation = exports.updateAutomation = exports.getAutomationById = exports.getAutomations = exports.createAutomation = void 0;
+const automation_service_1 = require("./automation.service");
+// Create a new Automation
+const createAutomation = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Product = yield (0, product_service_1.createProductInDb)(req.body);
+        const Automation = yield (0, automation_service_1.createAutomationInDb)(req.body);
         res.status(201).json({
             success: true,
-            data: Product
+            data: Automation
         });
     }
     catch (error) {
@@ -25,63 +25,63 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(400).json({ message: "Error creating ", error });
     }
 });
-exports.createProduct = createProduct;
-// Get all Products
-const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.createAutomation = createAutomation;
+// Get all Automations
+const getAutomations = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { categoryId, categoryName, name } = req.query;
-        const Products = yield (0, product_service_1.getProductsFromDb)(name, categoryName, categoryId);
+        const Automations = yield (0, automation_service_1.getAutomationsFromDb)(name, categoryName, categoryId);
         res.status(201).json({
             success: true,
-            data: Products
+            data: Automations
         });
     }
     catch (error) {
         res.status(500).json({ message: "Error fetching s", error });
     }
 });
-exports.getProducts = getProducts;
-// Get a single Product by ID
-const getProductById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getAutomations = getAutomations;
+// Get a single Automation by ID
+const getAutomationById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Product = yield (0, product_service_1.getProductByIdFromDb)(req.params.id);
-        if (!Product) {
+        const Automation = yield (0, automation_service_1.getAutomationByIdFromDb)(req.params.id);
+        if (!Automation) {
             res.status(404).json({ message: "User flow not found" });
             return;
         }
         res.status(201).json({
             success: true,
-            data: Product
+            data: Automation
         });
     }
     catch (error) {
         res.status(500).json({ message: "Error fetching ", error });
     }
 });
-exports.getProductById = getProductById;
-// Update a Product by ID
-const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getAutomationById = getAutomationById;
+// Update a Automation by ID
+const updateAutomation = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Product = yield (0, product_service_1.updateProductInDb)(req.params.id, req.body);
-        if (!Product) {
+        const Automation = yield (0, automation_service_1.updateAutomationInDb)(req.params.id, req.body);
+        if (!Automation) {
             res.status(404).json({ message: "User flow not found" });
             return;
         }
         res.status(201).json({
             success: true,
-            data: Product
+            data: Automation
         });
     }
     catch (error) {
         res.status(500).json({ message: "Error updating ", error });
     }
 });
-exports.updateProduct = updateProduct;
-// Delete a Product by ID
-const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.updateAutomation = updateAutomation;
+// Delete a Automation by ID
+const deleteAutomation = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Product = yield (0, product_service_1.deleteProductFromDb)(req.params.id);
-        if (!Product) {
+        const Automation = yield (0, automation_service_1.deleteAutomationFromDb)(req.params.id);
+        if (!Automation) {
             res.status(404).json({ message: "User flow not found" });
             return;
         }
@@ -91,4 +91,4 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(500).json({ message: "Error deleting ", error });
     }
 });
-exports.deleteProduct = deleteProduct;
+exports.deleteAutomation = deleteAutomation;
