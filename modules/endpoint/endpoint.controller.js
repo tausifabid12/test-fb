@@ -61,43 +61,43 @@ function handleWebhookData(req, res) {
                 //         }
                 //     ]
                 // }
-                if ((webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.field) == 'feed' && ((_e = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _e === void 0 ? void 0 : _e.item) == 'comment') {
-                    let customerId = (_g = (_f = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _f === void 0 ? void 0 : _f.from) === null || _g === void 0 ? void 0 : _g.id;
-                    let customerName = (_j = (_h = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _h === void 0 ? void 0 : _h.from) === null || _j === void 0 ? void 0 : _j.name;
-                    let comment = (_k = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _k === void 0 ? void 0 : _k.message;
-                    let comment_id = (_l = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _l === void 0 ? void 0 : _l.comment_id;
-                    let post_id = (_m = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _m === void 0 ? void 0 : _m.post_id;
-                    //============= find automation
-                    const automation = yield automation_model_1.default.find({ postId: post_id });
-                    let userId = (_o = automation[0]) === null || _o === void 0 ? void 0 : _o.userId;
-                    let pageId = (_p = automation[0]) === null || _p === void 0 ? void 0 : _p.pageId;
-                    let replies = (_q = automation[0]) === null || _q === void 0 ? void 0 : _q.commentReplies;
-                    let outOfStockReplies = (_r = automation[0]) === null || _r === void 0 ? void 0 : _r.outOfStockReplies;
-                    let automationType = (_s = automation[0]) === null || _s === void 0 ? void 0 : _s.automationType;
-                    let productsIds = (_t = automation[0]) === null || _t === void 0 ? void 0 : _t.productsIds;
-                    let keywords = (_u = automation[0]) === null || _u === void 0 ? void 0 : _u.keywords;
-                    let replyMessageArray = replies;
-                    if (automationType == 'Product_automation') {
-                        let isStockAvailable = (0, endpoint_helper_1.checkProductStock)(productsIds);
-                        console.log(isStockAvailable, 'accountData');
-                        if (!isStockAvailable) {
-                            replyMessageArray = outOfStockReplies;
-                        }
-                    }
-                    // ========= find user account for access token
-                    let accountData = yield accounts_model_1.default.find({ userId });
-                    console.log(accountData, 'accountData');
-                    let accessToken = (_v = accountData[0]) === null || _v === void 0 ? void 0 : _v.accessToken;
-                    // ================ get all pages with page access token
-                    const pageData = yield (0, endpoint_helper_1.getPagesToken)(accessToken, pageId);
-                    const pageAccessToken = pageData === null || pageData === void 0 ? void 0 : pageData.access_token;
-                    console.log(pageAccessToken, 'pageAccessToken');
-                    let randomReplyMessage = (0, getRandomItemFromArray_1.getRandomItem)(replyMessageArray);
-                    console.log(randomReplyMessage, 'randomReplyMessage');
-                    // ================ reply to comment
-                    const result = yield (0, endpoint_helper_1.replyToComment)(pageAccessToken, comment_id, randomReplyMessage);
-                    console.log(result, '||||||||||||| ++++++++++++++++++ |||||||||||||||');
-                }
+                // if ((webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.field) == 'feed' && ((_e = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _e === void 0 ? void 0 : _e.item) == 'comment') {
+                //     let customerId = (_g = (_f = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _f === void 0 ? void 0 : _f.from) === null || _g === void 0 ? void 0 : _g.id;
+                //     let customerName = (_j = (_h = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _h === void 0 ? void 0 : _h.from) === null || _j === void 0 ? void 0 : _j.name;
+                //     let comment = (_k = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _k === void 0 ? void 0 : _k.message;
+                //     let comment_id = (_l = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _l === void 0 ? void 0 : _l.comment_id;
+                //     let post_id = (_m = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _m === void 0 ? void 0 : _m.post_id;
+                //     //============= find automation
+                //     const automation = yield automation_model_1.default.find({ postId: post_id });
+                //     let userId = (_o = automation[0]) === null || _o === void 0 ? void 0 : _o.userId;
+                //     let pageId = (_p = automation[0]) === null || _p === void 0 ? void 0 : _p.pageId;
+                //     let replies = (_q = automation[0]) === null || _q === void 0 ? void 0 : _q.commentReplies;
+                //     let outOfStockReplies = (_r = automation[0]) === null || _r === void 0 ? void 0 : _r.outOfStockReplies;
+                //     let automationType = (_s = automation[0]) === null || _s === void 0 ? void 0 : _s.automationType;
+                //     let productsIds = (_t = automation[0]) === null || _t === void 0 ? void 0 : _t.productsIds;
+                //     let keywords = (_u = automation[0]) === null || _u === void 0 ? void 0 : _u.keywords;
+                //     let replyMessageArray = replies;
+                //     if (automationType == 'Product_automation') {
+                //         let isStockAvailable = (0, endpoint_helper_1.checkProductStock)(productsIds);
+                //         console.log(isStockAvailable, 'accountData');
+                //         if (!isStockAvailable) {
+                //             replyMessageArray = outOfStockReplies;
+                //         }
+                //     }
+                //     // ========= find user account for access token
+                //     let accountData = yield accounts_model_1.default.find({ userId });
+                //     console.log(accountData, 'accountData');
+                //     let accessToken = (_v = accountData[0]) === null || _v === void 0 ? void 0 : _v.accessToken;
+                //     // ================ get all pages with page access token
+                //     const pageData = yield (0, endpoint_helper_1.getPagesToken)(accessToken, pageId);
+                //     const pageAccessToken = pageData === null || pageData === void 0 ? void 0 : pageData.access_token;
+                //     console.log(pageAccessToken, 'pageAccessToken');
+                //     let randomReplyMessage = (0, getRandomItemFromArray_1.getRandomItem)(replyMessageArray);
+                //     console.log(randomReplyMessage, 'randomReplyMessage');
+                //     // ================ reply to comment
+                //     const result = yield (0, endpoint_helper_1.replyToComment)(pageAccessToken, comment_id, randomReplyMessage);
+                //     console.log(result, '||||||||||||| ++++++++++++++++++ |||||||||||||||');
+                // }
             }
             console.log("Webhook event:", entry);
         }));
