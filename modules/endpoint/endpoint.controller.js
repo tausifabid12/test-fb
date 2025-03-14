@@ -41,28 +41,41 @@ function handleWebhookData(req, res) {
     console.log(req.body);
     if (body.object === "page") {
         body.entry.forEach((entry) => __awaiter(this, void 0, void 0, function* () {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s;
-            console.log(entry);
-            console.log((entry === null || entry === void 0 ? void 0 : entry.length) ? entry[0] : '===========================');
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
             //  ================================ handle comment reply==============
             if ((_a = entry.changes) === null || _a === void 0 ? void 0 : _a.length) {
                 let webhookEvent = entry.changes[0];
-                console.log(webhookEvent, 'PPPPPPPPPPPPPPPPPP');
-                if ((webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.field) == 'feed' && ((_b = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _b === void 0 ? void 0 : _b.item) == 'comment') {
-                    let customerId = (_d = (_c = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _c === void 0 ? void 0 : _c.from) === null || _d === void 0 ? void 0 : _d.id;
-                    let customerName = (_f = (_e = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _e === void 0 ? void 0 : _e.from) === null || _f === void 0 ? void 0 : _f.name;
-                    let comment = (_g = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _g === void 0 ? void 0 : _g.message;
-                    let comment_id = (_h = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _h === void 0 ? void 0 : _h.comment_id;
-                    let post_id = (_j = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _j === void 0 ? void 0 : _j.post_id;
+                console.log(webhookEvent.messaging[0], 'webhookEvent.messaging[0]');
+                console.log((_b = webhookEvent.messaging[0]) === null || _b === void 0 ? void 0 : _b.sender[0], 'webhookEvent.messaging[0]?.sender[0]');
+                console.log((_c = webhookEvent.messaging[0]) === null || _c === void 0 ? void 0 : _c.recipient[0], 'webhookEvent.messaging[0]?.recipient[0]');
+                console.log((_d = webhookEvent.messaging[0]) === null || _d === void 0 ? void 0 : _d.message[0], 'webhookEvent.messaging[0]?.message[0]');
+                // let webhookEvent = {
+                //     time: 1741958489566,
+                //     id: '526106077262052',
+                //     messaging: [
+                //         {
+                //             sender: [Object],
+                //             recipient: [Object],
+                //             timestamp: 1741958241600,
+                //             message: [Object]
+                //         }
+                //     ]
+                // }
+                if ((webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.field) == 'feed' && ((_e = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _e === void 0 ? void 0 : _e.item) == 'comment') {
+                    let customerId = (_g = (_f = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _f === void 0 ? void 0 : _f.from) === null || _g === void 0 ? void 0 : _g.id;
+                    let customerName = (_j = (_h = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _h === void 0 ? void 0 : _h.from) === null || _j === void 0 ? void 0 : _j.name;
+                    let comment = (_k = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _k === void 0 ? void 0 : _k.message;
+                    let comment_id = (_l = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _l === void 0 ? void 0 : _l.comment_id;
+                    let post_id = (_m = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _m === void 0 ? void 0 : _m.post_id;
                     //============= find automation
                     const automation = yield automation_model_1.default.find({ postId: post_id });
-                    let userId = (_k = automation[0]) === null || _k === void 0 ? void 0 : _k.userId;
-                    let pageId = (_l = automation[0]) === null || _l === void 0 ? void 0 : _l.pageId;
-                    let replies = (_m = automation[0]) === null || _m === void 0 ? void 0 : _m.commentReplies;
-                    let outOfStockReplies = (_o = automation[0]) === null || _o === void 0 ? void 0 : _o.outOfStockReplies;
-                    let automationType = (_p = automation[0]) === null || _p === void 0 ? void 0 : _p.automationType;
-                    let productsIds = (_q = automation[0]) === null || _q === void 0 ? void 0 : _q.productsIds;
-                    let keywords = (_r = automation[0]) === null || _r === void 0 ? void 0 : _r.keywords;
+                    let userId = (_o = automation[0]) === null || _o === void 0 ? void 0 : _o.userId;
+                    let pageId = (_p = automation[0]) === null || _p === void 0 ? void 0 : _p.pageId;
+                    let replies = (_q = automation[0]) === null || _q === void 0 ? void 0 : _q.commentReplies;
+                    let outOfStockReplies = (_r = automation[0]) === null || _r === void 0 ? void 0 : _r.outOfStockReplies;
+                    let automationType = (_s = automation[0]) === null || _s === void 0 ? void 0 : _s.automationType;
+                    let productsIds = (_t = automation[0]) === null || _t === void 0 ? void 0 : _t.productsIds;
+                    let keywords = (_u = automation[0]) === null || _u === void 0 ? void 0 : _u.keywords;
                     let replyMessageArray = replies;
                     if (automationType == 'Product_automation') {
                         let isStockAvailable = (0, endpoint_helper_1.checkProductStock)(productsIds);
@@ -74,7 +87,7 @@ function handleWebhookData(req, res) {
                     // ========= find user account for access token
                     let accountData = yield accounts_model_1.default.find({ userId });
                     console.log(accountData, 'accountData');
-                    let accessToken = (_s = accountData[0]) === null || _s === void 0 ? void 0 : _s.accessToken;
+                    let accessToken = (_v = accountData[0]) === null || _v === void 0 ? void 0 : _v.accessToken;
                     // ================ get all pages with page access token
                     const pageData = yield (0, endpoint_helper_1.getPagesToken)(accessToken, pageId);
                     const pageAccessToken = pageData === null || pageData === void 0 ? void 0 : pageData.access_token;
