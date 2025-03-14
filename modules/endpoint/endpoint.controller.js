@@ -8,16 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyWebhook = verifyWebhook;
 exports.handleWebhookData = handleWebhookData;
-const automation_model_1 = __importDefault(require("../automation/automation.model"));
-const accounts_model_1 = __importDefault(require("../accounts/accounts.model"));
-const endpoint_helper_1 = require("./endpoint.helper");
-const getRandomItemFromArray_1 = require("../../helpers/getRandomItemFromArray");
 const VERIFY_TOKEN = "your_verify_token"; // Set this in App Dashboard
 const APP_SECRET = "07edcf372dc928b170fc3f1a15d70c5b"; // Found in Meta Developer Console
 // const APP_SECRET = "60e1159df179ff58ea6d1ca4596a0723"; // Found in Meta Developer Console
@@ -37,11 +30,11 @@ function verifyWebhook(req, res) {
 }
 // // Handle Webhook Data (Page Events)
 function handleWebhookData(req, res) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
     let body = req.body;
-    console.log(req.body);
     if (body.object === "page") {
         body.entry.forEach((entry) => __awaiter(this, void 0, void 0, function* () {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
+            var _a, _b, _c, _d;
             //  ================================ handle comment reply==============
             if ((_a = entry.changes) === null || _a === void 0 ? void 0 : _a.length) {
                 let webhookEvent = entry.changes[0];
@@ -61,51 +54,55 @@ function handleWebhookData(req, res) {
                 //         }
                 //     ]
                 // }
-                // if ((webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.field) == 'feed' && ((_e = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _e === void 0 ? void 0 : _e.item) == 'comment') {
-                //     let customerId = (_g = (_f = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _f === void 0 ? void 0 : _f.from) === null || _g === void 0 ? void 0 : _g.id;
-                //     let customerName = (_j = (_h = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _h === void 0 ? void 0 : _h.from) === null || _j === void 0 ? void 0 : _j.name;
-                //     let comment = (_k = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _k === void 0 ? void 0 : _k.message;
-                //     let comment_id = (_l = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _l === void 0 ? void 0 : _l.comment_id;
-                //     let post_id = (_m = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _m === void 0 ? void 0 : _m.post_id;
+                // if (webhookEvent?.field == 'feed' && webhookEvent?.value?.item == 'comment') {
+                //     let customerId = webhookEvent?.value?.from?.id
+                //     let customerName = webhookEvent?.value?.from?.name
+                //     let comment = webhookEvent?.value?.message
+                //     let comment_id = webhookEvent?.value?.comment_id
+                //     let post_id = webhookEvent?.value?.post_id
                 //     //============= find automation
-                //     const automation = yield automation_model_1.default.find({ postId: post_id });
-                //     let userId = (_o = automation[0]) === null || _o === void 0 ? void 0 : _o.userId;
-                //     let pageId = (_p = automation[0]) === null || _p === void 0 ? void 0 : _p.pageId;
-                //     let replies = (_q = automation[0]) === null || _q === void 0 ? void 0 : _q.commentReplies;
-                //     let outOfStockReplies = (_r = automation[0]) === null || _r === void 0 ? void 0 : _r.outOfStockReplies;
-                //     let automationType = (_s = automation[0]) === null || _s === void 0 ? void 0 : _s.automationType;
-                //     let productsIds = (_t = automation[0]) === null || _t === void 0 ? void 0 : _t.productsIds;
-                //     let keywords = (_u = automation[0]) === null || _u === void 0 ? void 0 : _u.keywords;
-                //     let replyMessageArray = replies;
+                //     const automation = await Automation.find({ postId: post_id })
+                //     let userId = automation[0]?.userId
+                //     let pageId = automation[0]?.pageId
+                //     let replies = automation[0]?.commentReplies
+                //     let outOfStockReplies = automation[0]?.outOfStockReplies
+                //     let automationType = automation[0]?.automationType
+                //     let productsIds = automation[0]?.productsIds
+                //     let keywords = automation[0]?.keywords
+                //     let replyMessageArray = replies
                 //     if (automationType == 'Product_automation') {
-                //         let isStockAvailable = (0, endpoint_helper_1.checkProductStock)(productsIds);
-                //         console.log(isStockAvailable, 'accountData');
+                //         let isStockAvailable = checkProductStock(productsIds)
+                //         console.log(isStockAvailable, 'accountData')
                 //         if (!isStockAvailable) {
-                //             replyMessageArray = outOfStockReplies;
+                //             replyMessageArray = outOfStockReplies
                 //         }
                 //     }
                 //     // ========= find user account for access token
-                //     let accountData = yield accounts_model_1.default.find({ userId });
-                //     console.log(accountData, 'accountData');
-                //     let accessToken = (_v = accountData[0]) === null || _v === void 0 ? void 0 : _v.accessToken;
+                //     let accountData = await Account.find({ userId });
+                //     console.log(accountData, 'accountData')
+                //     let accessToken = accountData[0]?.accessToken
                 //     // ================ get all pages with page access token
-                //     const pageData = yield (0, endpoint_helper_1.getPagesToken)(accessToken, pageId);
-                //     const pageAccessToken = pageData === null || pageData === void 0 ? void 0 : pageData.access_token;
-                //     console.log(pageAccessToken, 'pageAccessToken');
-                //     let randomReplyMessage = (0, getRandomItemFromArray_1.getRandomItem)(replyMessageArray);
-                //     console.log(randomReplyMessage, 'randomReplyMessage');
+                //     const pageData = await getPagesToken(accessToken, pageId)
+                //     const pageAccessToken = pageData?.access_token
+                //     console.log(pageAccessToken, 'pageAccessToken')
+                //     let randomReplyMessage = getRandomItem(replyMessageArray)
+                //     console.log(randomReplyMessage, 'randomReplyMessage')
                 //     // ================ reply to comment
-                //     const result = yield (0, endpoint_helper_1.replyToComment)(pageAccessToken, comment_id, randomReplyMessage);
-                //     console.log(result, '||||||||||||| ++++++++++++++++++ |||||||||||||||');
+                //     const result = await replyToComment(pageAccessToken, comment_id, randomReplyMessage)
+                //     console.log(result, '||||||||||||| ++++++++++++++++++ |||||||||||||||')
                 // }
             }
             console.log("Webhook event:", entry);
         }));
-        res.status(200).send("EVENT_RECEIVED");
+        // res.status(200).send("EVENT_RECEIVED");
     }
     else {
-        res.sendStatus(404);
+        // res.sendStatus(404);
     }
+    console.log((_b = (_a = req.body) === null || _a === void 0 ? void 0 : _a.entry[0]) === null || _b === void 0 ? void 0 : _b.messaging[0]);
+    console.log((_e = (_d = (_c = req.body) === null || _c === void 0 ? void 0 : _c.entry[0]) === null || _d === void 0 ? void 0 : _d.messaging[0]) === null || _e === void 0 ? void 0 : _e.sender[0]);
+    console.log((_h = (_g = (_f = req.body) === null || _f === void 0 ? void 0 : _f.entry[0]) === null || _g === void 0 ? void 0 : _g.messaging[0]) === null || _h === void 0 ? void 0 : _h.recipient[0]);
+    console.log((_l = (_k = (_j = req.body) === null || _j === void 0 ? void 0 : _j.entry[0]) === null || _k === void 0 ? void 0 : _k.messaging[0]) === null || _l === void 0 ? void 0 : _l.message[0]);
     // const signature = req.headers["x-hub-signature-256"] as string;
     // if (!verifySignature(req.body, signature)) {
     //     console.error("Invalid signature, request rejected.");
