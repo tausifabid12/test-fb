@@ -30,30 +30,17 @@ function verifyWebhook(req, res) {
 }
 // // Handle Webhook Data (Page Events)
 function handleWebhookData(req, res) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
     let body = req.body;
     if (body.object === "page") {
         body.entry.forEach((entry) => __awaiter(this, void 0, void 0, function* () {
-            var _a, _b, _c, _d;
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
             //  ================================ handle comment reply==============
-            if ((_a = entry.changes) === null || _a === void 0 ? void 0 : _a.length) {
+            if (entry.changes && ((_a = entry.changes) === null || _a === void 0 ? void 0 : _a.length)) {
                 let webhookEvent = entry.changes[0];
                 console.log(webhookEvent.messaging[0], 'webhookEvent.messaging[0]');
                 console.log((_b = webhookEvent.messaging[0]) === null || _b === void 0 ? void 0 : _b.sender[0], 'webhookEvent.messaging[0]?.sender[0]');
                 console.log((_c = webhookEvent.messaging[0]) === null || _c === void 0 ? void 0 : _c.recipient[0], 'webhookEvent.messaging[0]?.recipient[0]');
                 console.log((_d = webhookEvent.messaging[0]) === null || _d === void 0 ? void 0 : _d.message[0], 'webhookEvent.messaging[0]?.message[0]');
-                // let webhookEvent = {
-                //     time: 1741958489566,
-                //     id: '526106077262052',
-                //     messaging: [
-                //         {
-                //             sender: [Object],
-                //             recipient: [Object],
-                //             timestamp: 1741958241600,
-                //             message: [Object]
-                //         }
-                //     ]
-                // }
                 // if (webhookEvent?.field == 'feed' && webhookEvent?.value?.item == 'comment') {
                 //     let customerId = webhookEvent?.value?.from?.id
                 //     let customerName = webhookEvent?.value?.from?.name
@@ -92,17 +79,27 @@ function handleWebhookData(req, res) {
                 //     console.log(result, '||||||||||||| ++++++++++++++++++ |||||||||||||||')
                 // }
             }
+            if (entry.messaging && ((_e = entry.messaging) === null || _e === void 0 ? void 0 : _e.length)) {
+                console.log(true, "||||||||||||||||||||||||||||||||||||||||||||||||");
+            }
             console.log("Webhook event:", entry);
+            // let entry = req.body?.entry[0]?.messaging[0]
+            let messagingData = (_g = (_f = req.body) === null || _f === void 0 ? void 0 : _f.entry[0]) === null || _g === void 0 ? void 0 : _g.messaging[0];
+            const senderId = (_h = messagingData === null || messagingData === void 0 ? void 0 : messagingData.sender) === null || _h === void 0 ? void 0 : _h.id;
+            const recipientId = (_j = messagingData === null || messagingData === void 0 ? void 0 : messagingData.recipient) === null || _j === void 0 ? void 0 : _j.id;
+            const messageId = (_k = messagingData === null || messagingData === void 0 ? void 0 : messagingData.message) === null || _k === void 0 ? void 0 : _k.mid;
+            const message = (_l = messagingData === null || messagingData === void 0 ? void 0 : messagingData.message) === null || _l === void 0 ? void 0 : _l.text;
+            console.log(senderId, recipientId, messageId, message);
         }));
         // res.status(200).send("EVENT_RECEIVED");
     }
     else {
         // res.sendStatus(404);
     }
-    console.log((_b = (_a = req.body) === null || _a === void 0 ? void 0 : _a.entry[0]) === null || _b === void 0 ? void 0 : _b.messaging[0]);
-    console.log((_e = (_d = (_c = req.body) === null || _c === void 0 ? void 0 : _c.entry[0]) === null || _d === void 0 ? void 0 : _d.messaging[0]) === null || _e === void 0 ? void 0 : _e.sender[0]);
-    console.log((_h = (_g = (_f = req.body) === null || _f === void 0 ? void 0 : _f.entry[0]) === null || _g === void 0 ? void 0 : _g.messaging[0]) === null || _h === void 0 ? void 0 : _h.recipient[0]);
-    console.log((_l = (_k = (_j = req.body) === null || _j === void 0 ? void 0 : _j.entry[0]) === null || _k === void 0 ? void 0 : _k.messaging[0]) === null || _l === void 0 ? void 0 : _l.message[0]);
+    // console.log(req.body?.entry[0]?.messaging[0])
+    // console.log(req.body?.entry[0]?.messaging[0]?.sender[0])
+    // console.log(req.body?.entry[0]?.messaging[0]?.recipient[0])
+    // console.log(req.body?.entry[0]?.messaging[0]?.message[0])
     // const signature = req.headers["x-hub-signature-256"] as string;
     // if (!verifySignature(req.body, signature)) {
     //     console.error("Invalid signature, request rejected.");
