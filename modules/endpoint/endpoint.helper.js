@@ -134,6 +134,7 @@ function sendProductDetailsMessage(pageAccessToken, recipientId, productIds) {
                 }
             }
         };
+        console.log(payload, 'PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP  -- payload');
         const res = yield fetch(`https://graph.facebook.com/v15.0/me/messages?access_token=${pageAccessToken}`, {
             method: "POST",
             headers: {
