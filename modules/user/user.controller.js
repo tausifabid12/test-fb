@@ -150,7 +150,7 @@ exports.getUsers = getUsers;
 // Update a Product by ID
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Product = yield (0, user_service_1.updateUserInDb)(req.params.id, req.body);
+        const Product = yield (0, user_service_1.updateUserInDb)(req.params.userId, req.body);
         if (!Product) {
             res.status(404).json({ message: "User  not found" });
             return;

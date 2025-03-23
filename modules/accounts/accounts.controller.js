@@ -8,14 +8,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteAccount = exports.updateAccount = exports.getAccountById = exports.getAccounts = exports.createAccount = void 0;
 const accounts_service_1 = require("./accounts.service");
+const accounts_model_1 = __importDefault(require("./accounts.model"));
 // Create a new Account
 const createAccount = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Account = yield (0, accounts_service_1.createAccountInDb)(req.body);
-        res.status(201).json(Account);
+        const { profileId } = req.body;
+        // Check if an account with the same profileId already exists
+        const existingAccount = yield accounts_model_1.default.findOne({ profileId });
+        if (existingAccount) {
+            res.status(400).json({
+                success: false,
+                message: "This Facebook account is already linked to another account."
+            });
+            return; // Stop execution
+        }
+        const result = yield (0, accounts_service_1.createAccountInDb)(req.body);
+        res.status(201).json({
+            success: true,
+            data: result
+        });
     }
     catch (error) {
         res.status(400).json({ message: "Error creating ", error });
@@ -27,7 +44,10 @@ const getAccounts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const { userId } = req.query;
         const Accounts = yield (0, accounts_service_1.getAccountsFromDb)(userId);
-        res.json(Accounts);
+        res.status(201).json({
+            success: true,
+            data: Accounts
+        });
     }
     catch (error) {
         res.status(500).json({ message: "Error fetching s", error });

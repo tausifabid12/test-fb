@@ -20,5 +20,5 @@ const LeadILeadSchema = new mongoose_1.default.Schema({
     profileId: { type: String, unique: true },
     source: { type: String, enum: ['facebook', 'instagram'], default: 'facebook' }
 }, { timestamps: true });
-const LeadILead = mongoose_1.default.model("LeadILead", LeadILeadSchema);
-exports.default = LeadILead;
+const Lead = mongoose_1.default.model("LeadILead", LeadILeadSchema);
+exports.default = Lead;

@@ -26,9 +26,10 @@ const createCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.createCategory = createCategory;
 // Get all Categorys
-const getCategorys = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getCategorys = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Categorys = yield (0, category_service_1.getCategorysFromDb)();
+        const { id, userId, name, } = req.query;
+        const Categorys = yield (0, category_service_1.getCategorysFromDb)(id, userId, name);
         res.status(201).json({
             success: true,
             data: Categorys

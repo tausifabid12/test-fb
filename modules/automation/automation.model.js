@@ -9,7 +9,7 @@ const AutomationSchema = new mongoose_1.default.Schema({
     pageId: { type: String, required: true },
     postId: { type: String, required: true },
     postImageUrl: { type: String, required: true },
-    postContent: { type: String, required: true },
+    postContent: { type: String },
     postUrl: { type: String, required: true },
     keywords: { type: [String], default: [] },
     commentReplies: { type: [String], default: [] },

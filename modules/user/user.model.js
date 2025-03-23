@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const UserSchema = new mongoose_1.default.Schema({
-    userId: { type: String, unique: true },
-    name: { type: String, required: true },
+    userId: { type: String, required: true, unique: true },
+    name: { type: String },
     email: { type: String, required: true, unique: true },
     phone: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String },
     businessName: { type: String },
     businessDescription: { type: String },
     logoUrl: { type: String },
@@ -22,10 +22,12 @@ const UserSchema = new mongoose_1.default.Schema({
     instagramUrl: { type: String },
     youtubeUrl: { type: String },
     websiteUrl: { type: String },
-    businessType: { type: String, default: '' },
+    businessType: { type: String },
     openingTime: { type: String },
     closingTime: { type: String },
-    isARetailer: { type: Boolean, default: true }
+    userType: { type: String, enum: ['admin', 'superAdmin', 'agent', 'support', 'consumer'], default: "consumer" },
+    isARetailer: { type: Boolean, default: false },
+    isFacebookConnected: { type: Boolean, default: false },
 }, { timestamps: true });
 const User = mongoose_1.default.model("User", UserSchema);
 exports.default = User;

@@ -8,13 +8,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyWebhook = verifyWebhook;
 exports.handleWebhookData = handleWebhookData;
-const VERIFY_TOKEN = "your_verify_token"; // Set this in App Dashboard
-const APP_SECRET = "07edcf372dc928b170fc3f1a15d70c5b"; // Found in Meta Developer Console
-// const APP_SECRET = "60e1159df179ff58ea6d1ca4596a0723"; // Found in Meta Developer Console
-const PAGE_ACCESS_TOKEN = "EAAFzFylf8lMBOyzypGsnMVQTJbahntZAp1qVXPMvyqIMGFfjbVyIVpS8zZBqOZCmd9Cceqbsec49oudMarvg6QsLKAOtpAR6xm9oZA3E36Ni1FwMsI80nv30ghGMHPZCwlVlD2w1DqwHVnp02kY85SSPJi1oBHcar2ICUwBhZBX7O1TJyZCFGmiOFZCincPhkt2blhDSe3Kc46iLeMww0RGCHusVfqiUBl2YyCZCbs3kI"; // Page Access Token from Meta Developer Console
+const automation_model_1 = __importDefault(require("../automation/automation.model"));
+const accounts_model_1 = __importDefault(require("../accounts/accounts.model"));
+const endpoint_helper_1 = require("./endpoint.helper");
+const getRandomItemFromArray_1 = require("../../helpers/getRandomItemFromArray");
+const leads_model_1 = __importDefault(require("../leads/leads.model"));
+const message_model_1 = __importDefault(require("../message/message.model"));
+const VERIFY_TOKEN = "your_verify_token";
 // Webhook Verification
 function verifyWebhook(req, res) {
     let mode = req.query["hub.mode"];
@@ -33,133 +39,157 @@ function handleWebhookData(req, res) {
     let body = req.body;
     if (body.object === "page") {
         body.entry.forEach((entry) => __awaiter(this, void 0, void 0, function* () {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
-            //  ================================ handle comment reply==============
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11;
+            // *********************************** Comment Automation Process start ***********************************************
             if (entry.changes && ((_a = entry.changes) === null || _a === void 0 ? void 0 : _a.length)) {
                 let webhookEvent = entry.changes[0];
-                console.log(webhookEvent.messaging[0], 'webhookEvent.messaging[0]');
-                console.log((_b = webhookEvent.messaging[0]) === null || _b === void 0 ? void 0 : _b.sender[0], 'webhookEvent.messaging[0]?.sender[0]');
-                console.log((_c = webhookEvent.messaging[0]) === null || _c === void 0 ? void 0 : _c.recipient[0], 'webhookEvent.messaging[0]?.recipient[0]');
-                console.log((_d = webhookEvent.messaging[0]) === null || _d === void 0 ? void 0 : _d.message[0], 'webhookEvent.messaging[0]?.message[0]');
-                // if (webhookEvent?.field == 'feed' && webhookEvent?.value?.item == 'comment') {
-                //     let customerId = webhookEvent?.value?.from?.id
-                //     let customerName = webhookEvent?.value?.from?.name
-                //     let comment = webhookEvent?.value?.message
-                //     let comment_id = webhookEvent?.value?.comment_id
-                //     let post_id = webhookEvent?.value?.post_id
-                //     //============= find automation
-                //     const automation = await Automation.find({ postId: post_id })
-                //     let userId = automation[0]?.userId
-                //     let pageId = automation[0]?.pageId
-                //     let replies = automation[0]?.commentReplies
-                //     let outOfStockReplies = automation[0]?.outOfStockReplies
-                //     let automationType = automation[0]?.automationType
-                //     let productsIds = automation[0]?.productsIds
-                //     let keywords = automation[0]?.keywords
-                //     let replyMessageArray = replies
-                //     if (automationType == 'Product_automation') {
-                //         let isStockAvailable = checkProductStock(productsIds)
-                //         console.log(isStockAvailable, 'accountData')
-                //         if (!isStockAvailable) {
-                //             replyMessageArray = outOfStockReplies
-                //         }
-                //     }
-                //     // ========= find user account for access token
-                //     let accountData = await Account.find({ userId });
-                //     console.log(accountData, 'accountData')
-                //     let accessToken = accountData[0]?.accessToken
-                //     // ================ get all pages with page access token
-                //     const pageData = await getPagesToken(accessToken, pageId)
-                //     const pageAccessToken = pageData?.access_token
-                //     console.log(pageAccessToken, 'pageAccessToken')
-                //     let randomReplyMessage = getRandomItem(replyMessageArray)
-                //     console.log(randomReplyMessage, 'randomReplyMessage')
-                //     // ================ reply to comment
-                //     const result = await replyToComment(pageAccessToken, comment_id, randomReplyMessage)
-                //     console.log(result, '||||||||||||| ++++++++++++++++++ |||||||||||||||')
-                // }
+                if ((webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.field) == 'feed' && ((_b = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _b === void 0 ? void 0 : _b.item) == 'comment') {
+                    let customerId = (_d = (_c = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _c === void 0 ? void 0 : _c.from) === null || _d === void 0 ? void 0 : _d.id;
+                    let customerName = (_f = (_e = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _e === void 0 ? void 0 : _e.from) === null || _f === void 0 ? void 0 : _f.name;
+                    let comment = (_g = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _g === void 0 ? void 0 : _g.message;
+                    let comment_id = (_h = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _h === void 0 ? void 0 : _h.comment_id;
+                    let post_id = (_j = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _j === void 0 ? void 0 : _j.post_id;
+                    //============= find automation
+                    const automation = yield automation_model_1.default.find({ postId: post_id });
+                    let userId = (_k = automation[0]) === null || _k === void 0 ? void 0 : _k.userId;
+                    let pageId = (_l = automation[0]) === null || _l === void 0 ? void 0 : _l.pageId;
+                    let replies = (_m = automation[0]) === null || _m === void 0 ? void 0 : _m.commentReplies;
+                    let outOfStockReplies = (_o = automation[0]) === null || _o === void 0 ? void 0 : _o.outOfStockReplies;
+                    let automationType = (_p = automation[0]) === null || _p === void 0 ? void 0 : _p.automationType;
+                    let productsIds = (_q = automation[0]) === null || _q === void 0 ? void 0 : _q.productsIds;
+                    let keywords = (_r = automation[0]) === null || _r === void 0 ? void 0 : _r.keywords;
+                    let replyMessageArray = replies;
+                    if (automationType == 'Product_automation') {
+                        let isStockAvailable = (0, endpoint_helper_1.checkProductStock)(productsIds);
+                        console.log(isStockAvailable, 'accountData');
+                        if (!isStockAvailable) {
+                            replyMessageArray = outOfStockReplies;
+                        }
+                    }
+                    // ========= find user account for access token======================================
+                    let accountData = yield accounts_model_1.default.find({ userId });
+                    let account_accessToken = (_s = accountData[0]) === null || _s === void 0 ? void 0 : _s.accessToken;
+                    // ================ get all pages with page access token=============================
+                    let pageData = (_u = (_t = accountData[0]) === null || _t === void 0 ? void 0 : _t.pages) === null || _u === void 0 ? void 0 : _u.find(item => item.id == pageId);
+                    const pageAccessToken = pageData === null || pageData === void 0 ? void 0 : pageData.access_token;
+                    // const pageData = await getPagesToken(accessToken, pageId)
+                    // const pageAccessToken = pageData?.access_token
+                    // ============================== reply to comment===================================
+                    let randomReplyMessage = (0, getRandomItemFromArray_1.getRandomItem)(replyMessageArray);
+                    const result = yield (0, endpoint_helper_1.replyToComment)(pageAccessToken, comment_id, randomReplyMessage);
+                    //=============================== send product details message =====================
+                    const messageResult = yield (0, endpoint_helper_1.sendProductDetailsMessage)(pageAccessToken, customerId, productsIds);
+                    console.log(result, '||||||||||||| ++++++++++++++++++ |||||||||||||||', messageResult);
+                    // ==================== save commenter as a lead
+                    let leadsData = yield leads_model_1.default.find({ profileId: customerId });
+                    if (leadsData && ((_v = leadsData[0]) === null || _v === void 0 ? void 0 : _v._id)) {
+                        let newLead = {
+                            name: customerName,
+                            profileId: customerId,
+                            email: "",
+                            phone: "",
+                            profileUrl: "",
+                            interestedPostIds: [...(_w = leadsData[0]) === null || _w === void 0 ? void 0 : _w.interestedPostIds, post_id],
+                            interestedProductId: [...(_x = leadsData[0]) === null || _x === void 0 ? void 0 : _x.interestedProductId, ...productsIds],
+                            isCustomer: false,
+                            orderCount: 0,
+                            orderIds: [],
+                            address: "",
+                            state: "",
+                            city: "",
+                            source: "facebook"
+                        };
+                        leads_model_1.default.findByIdAndUpdate((_y = leadsData[0]) === null || _y === void 0 ? void 0 : _y._id, newLead, { new: true });
+                    }
+                    else {
+                        let newLead = {
+                            name: customerName || "",
+                            profileId: customerId,
+                            email: "",
+                            phone: "",
+                            profileUrl: "",
+                            interestedPostIds: [post_id],
+                            interestedProductId: productsIds,
+                            isCustomer: false,
+                            orderCount: 0,
+                            orderIds: [],
+                            address: "",
+                            state: "",
+                            city: "",
+                            source: "facebook"
+                        };
+                        yield leads_model_1.default.create(newLead);
+                    }
+                }
             }
-            if (entry.messaging && ((_e = entry.messaging) === null || _e === void 0 ? void 0 : _e.length)) {
-                console.log(true, "||||||||||||||||||||||||||||||||||||||||||||||||");
+            // ***********************************  automation Process end ***********************************************
+            // ================================== handle message ==========================================
+            if (entry.messaging && ((_z = entry.messaging) === null || _z === void 0 ? void 0 : _z.length)) {
+                let messagingData = (_1 = (_0 = req.body) === null || _0 === void 0 ? void 0 : _0.entry[0]) === null || _1 === void 0 ? void 0 : _1.messaging[0];
+                const time = messagingData === null || messagingData === void 0 ? void 0 : messagingData.time;
+                const senderId = (_2 = messagingData === null || messagingData === void 0 ? void 0 : messagingData.sender) === null || _2 === void 0 ? void 0 : _2.id;
+                const recipientId = (_3 = messagingData === null || messagingData === void 0 ? void 0 : messagingData.recipient) === null || _3 === void 0 ? void 0 : _3.id;
+                const messageId = (_4 = messagingData === null || messagingData === void 0 ? void 0 : messagingData.message) === null || _4 === void 0 ? void 0 : _4.mid;
+                const message = (_5 = messagingData === null || messagingData === void 0 ? void 0 : messagingData.message) === null || _5 === void 0 ? void 0 : _5.text;
+                let accountData = yield accounts_model_1.default.find({ profileId: recipientId });
+                const userId = (_6 = accountData[0]) === null || _6 === void 0 ? void 0 : _6.userId;
+                const username = (_7 = accountData[0]) === null || _7 === void 0 ? void 0 : _7.name;
+                //============= check if user is a lead ======================
+                let leadsData = yield leads_model_1.default.find({ profileId: senderId });
+                let leadName = (_8 = leadsData[0]) === null || _8 === void 0 ? void 0 : _8.name;
+                if (leadName) {
+                    //============== check for previous messages
+                    let oldMessageData = yield message_model_1.default.find({ senderProfileId: senderId });
+                    let messageData;
+                    if ((_9 = oldMessageData[0]) === null || _9 === void 0 ? void 0 : _9._id) {
+                        let oldMessages = (_10 = oldMessageData[0]) === null || _10 === void 0 ? void 0 : _10.messages;
+                        messageData = {
+                            "userId": userId,
+                            "userName": username,
+                            "receiverProfileId": recipientId,
+                            "senderProfileId": senderId,
+                            "senderName": "Alice Smith",
+                            messages: [...oldMessages,
+                                {
+                                    messageText: message,
+                                    imageUrl: "",
+                                    videoUrl: "",
+                                    type: "text",
+                                    messageId: messageId,
+                                    isSeen: false,
+                                    time: time,
+                                    echo: false
+                                }]
+                        };
+                        yield message_model_1.default.findByIdAndUpdate((_11 = oldMessageData[0]) === null || _11 === void 0 ? void 0 : _11._id, messageData, { new: true });
+                    }
+                    else {
+                        messageData = {
+                            "userId": userId,
+                            "userName": username,
+                            "receiverProfileId": recipientId,
+                            "senderProfileId": senderId,
+                            "senderName": "Alice Smith",
+                            messages: [
+                                {
+                                    messageText: message,
+                                    imageUrl: "",
+                                    videoUrl: "",
+                                    type: "text",
+                                    messageId: messageId,
+                                    isSeen: false,
+                                    time: time,
+                                    echo: false
+                                }
+                            ]
+                        };
+                        yield message_model_1.default.create(messageData);
+                    }
+                }
             }
-            console.log("Webhook event:", entry);
-            // let entry = req.body?.entry[0]?.messaging[0]
-            let messagingData = (_g = (_f = req.body) === null || _f === void 0 ? void 0 : _f.entry[0]) === null || _g === void 0 ? void 0 : _g.messaging[0];
-            const senderId = (_h = messagingData === null || messagingData === void 0 ? void 0 : messagingData.sender) === null || _h === void 0 ? void 0 : _h.id;
-            const recipientId = (_j = messagingData === null || messagingData === void 0 ? void 0 : messagingData.recipient) === null || _j === void 0 ? void 0 : _j.id;
-            const messageId = (_k = messagingData === null || messagingData === void 0 ? void 0 : messagingData.message) === null || _k === void 0 ? void 0 : _k.mid;
-            const message = (_l = messagingData === null || messagingData === void 0 ? void 0 : messagingData.message) === null || _l === void 0 ? void 0 : _l.text;
-            console.log(senderId, recipientId, messageId, message);
         }));
-        // res.status(200).send("EVENT_RECEIVED");
     }
     else {
-        // res.sendStatus(404);
     }
-    // console.log(req.body?.entry[0]?.messaging[0])
-    // console.log(req.body?.entry[0]?.messaging[0]?.sender[0])
-    // console.log(req.body?.entry[0]?.messaging[0]?.recipient[0])
-    // console.log(req.body?.entry[0]?.messaging[0]?.message[0])
-    // const signature = req.headers["x-hub-signature-256"] as string;
-    // if (!verifySignature(req.body, signature)) {
-    //     console.error("Invalid signature, request rejected.");
-    //     // return res.sendStatus(403);
-    // }
-    // console.log("Webhook received:", JSON.stringify(req.body, null, 2));
-    // // Process Webhook Event
-    // if (req.body.object === "page") {
-    //     req.body.entry.forEach((entry: any) => {
-    //         entry.changes.forEach((change: any) => {
-    //             if (change.field === "feed") {
-    //                 console.log(change.value, "||||||||||||||||||||||||||||||||||||||||||| +++++++++++++++++++")
-    //                 // handlePageFeedEvent(change.value);
-    //             }
-    //         });
-    //     });
-    // }
     res.sendStatus(200);
 }
-// // Handle Page Feed Events (Posts, Comments, Likes)
-// async function handlePageFeedEvent(event: any) {
-//     console.log("Page Feed Event:", event);
-//     const { item, post_id, message, from } = event;
-//     if (item === "post") {
-//         console.log(`New post by ${from.name}: ${message}`);
-//         // Auto-comment on new posts
-//         await commentOnPost(post_id, "Thank you for posting!");
-//     }
-// }
-// // Comment on a Facebook Page Post
-// async function commentOnPost(postId: string, message: string) {
-//     try {
-//         const url = `https://graph.facebook.com/${postId}/comments`;
-//         const response = await axios.post(url, {
-//             message,
-//             access_token: PAGE_ACCESS_TOKEN,
-//         });
-//         console.log("Comment posted:", response.data);
-//     } catch (error: any) {
-//         console.error("Error posting comment:", error.response?.data || error.message);
-//     }
-// }
-// // Signature verification function
-// function verifySignature(payload: any, signature: string | undefined): boolean {
-//     if (!signature) return false;
-//     const receivedHash = signature.split("=")[1];
-//     if (!receivedHash) return false;
-//     const expectedHash = crypto
-//         .createHmac("sha256", APP_SECRET)
-//         .update(JSON.stringify(payload))
-//         .digest("hex");
-//     return receivedHash === expectedHash;
-// }
-// // Subscribe App to Page Webhooks
-// export async function subscribeAppToPage(pageId: string) {
-//     try {
-//         const url = `https://graph.facebook.com/${pageId}/subscribed_apps?subscribed_fields=feed,messages&access_token=${PAGE_ACCESS_TOKEN}`;
-//         const response = await axios.post(url);
-//         console.log("Successfully subscribed to page:", response.data);
-//     } catch (error: any) {
-//         console.error("Error subscribing to page:", error.response?.data || error.message);
-//     }
-// }

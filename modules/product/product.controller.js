@@ -29,8 +29,8 @@ exports.createProduct = createProduct;
 // Get all Products
 const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { categoryId, categoryName, name } = req.query;
-        const Products = yield (0, product_service_1.getProductsFromDb)(name, categoryName, categoryId);
+        const { categoryId, categoryName, name, userId } = req.query;
+        const Products = yield (0, product_service_1.getProductsFromDb)(name, categoryName, categoryId, userId);
         res.status(201).json({
             success: true,
             data: Products

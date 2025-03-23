@@ -40,6 +40,7 @@ const updateAccountInDb = (id, data) => __awaiter(void 0, void 0, void 0, functi
 exports.updateAccountInDb = updateAccountInDb;
 // Delete a Account by ID
 const deleteAccountFromDb = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield accounts_model_1.default.findByIdAndDelete(id);
+    // return await Account.findByIdAndDelete(id);
+    return yield accounts_model_1.default.deleteMany({});
 });
 exports.deleteAccountFromDb = deleteAccountFromDb;

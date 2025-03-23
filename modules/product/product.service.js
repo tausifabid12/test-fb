@@ -20,10 +20,13 @@ const createProductInDb = (data) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.createProductInDb = createProductInDb;
 // Get all Products
-const getProductsFromDb = (name, categoryName, categoryId) => __awaiter(void 0, void 0, void 0, function* () {
+const getProductsFromDb = (name, categoryName, categoryId, userId) => __awaiter(void 0, void 0, void 0, function* () {
     const filter = {};
     if (name) {
         filter.name = { $regex: name, $options: "i" };
+    }
+    if (userId) {
+        filter.userId = userId;
     }
     if (categoryName) {
         filter.categoryName = { $regex: categoryName, $options: "i" };

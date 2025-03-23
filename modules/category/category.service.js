@@ -20,8 +20,18 @@ const createCategoryInDb = (data) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.createCategoryInDb = createCategoryInDb;
 // Get all Categorys
-const getCategorysFromDb = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield category_model_1.default.find();
+const getCategorysFromDb = (id, userId, name) => __awaiter(void 0, void 0, void 0, function* () {
+    const filter = {};
+    if (name) {
+        filter.name = { $regex: name, $options: "i" };
+    }
+    if (userId) {
+        filter.userId = userId;
+    }
+    if (id) {
+        filter._id = id;
+    }
+    return yield category_model_1.default.find(filter);
 });
 exports.getCategorysFromDb = getCategorysFromDb;
 // Get a single Category by ID
