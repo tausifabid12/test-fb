@@ -72,7 +72,7 @@ function handleWebhookData(req, res) {
                         console.log('here }}}}}}}}}}}}}}} 99999999999999');
                         let replyMessageArray = replies;
                         if (automationType == 'Product_automation') {
-                            let isStockAvailable = (0, endpoint_helper_1.checkProductStock)(productsIds);
+                            let isStockAvailable = yield (0, endpoint_helper_1.checkProductStock)(productsIds);
                             console.log(isStockAvailable, 'isStockAvailable ||||||||||');
                             if (!isStockAvailable) {
                                 replyMessageArray = outOfStockReplies;
@@ -90,13 +90,14 @@ function handleWebhookData(req, res) {
                         // const pageAccessToken = pageData?.access_token
                         //    ======================================= check if comment has any  keyword ===========================
                         const isKeywordExists = (0, endpoint_helper_1.containsKeyword)(keywords, comment);
+                        console.log(isKeywordExists, '||||||||||||| isKeywordExists ++++++++++++++++++ |||||||||||||||');
                         if (isKeywordExists) {
                             // ============================== reply to comment===================================
                             let randomReplyMessage = (0, getRandomItemFromArray_1.getRandomItem)(replyMessageArray);
                             const result = yield (0, endpoint_helper_1.replyToComment)(pageAccessToken, comment_id, randomReplyMessage);
+                            console.log(result, '||||||||||||| result ++++++++++++++++++ |||||||||||||||');
                             //=============================== send product details message =====================
                             const messageResult = yield (0, endpoint_helper_1.sendProductDetailsMessage)(pageAccessToken, customerId, productsIds);
-                            console.log(result, '||||||||||||| result ++++++++++++++++++ |||||||||||||||');
                             console.log(messageResult, ' messageResult||||||||||||| ++++++++++++++++++ |||||||||||||||');
                         }
                         // ==================== save commenter as a lead
