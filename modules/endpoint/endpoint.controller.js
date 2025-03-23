@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyWebhook = verifyWebhook;
 exports.handleWebhookData = handleWebhookData;
-exports.handleWebhookDataTest = handleWebhookDataTest;
 const automation_model_1 = __importDefault(require("../automation/automation.model"));
 const accounts_model_1 = __importDefault(require("../accounts/accounts.model"));
 const endpoint_helper_1 = require("./endpoint.helper");
@@ -95,7 +94,7 @@ function handleWebhookData(req, res) {
                         const result = yield (0, endpoint_helper_1.replyToComment)(pageAccessToken, comment_id, randomReplyMessage);
                         console.log(result, '||||||||||||| result ++++++++++++++++++ |||||||||||||||');
                         //=============================== send product details message =====================
-                        const messageResult = yield (0, endpoint_helper_1.sendProductDetailsMessage)(pageAccessToken, customerId, productsIds);
+                        const messageResult = yield (0, endpoint_helper_1.sendProductDetailsMessage)(pageAccessToken, comment_id, productsIds);
                         console.log(messageResult, ' messageResult||||||||||||| ++++++++++++++++++ |||||||||||||||');
                     }
                     // ==================== save commenter as a lead
@@ -206,84 +205,6 @@ function handleWebhookData(req, res) {
             //         }
             //     }
             // }
-        }
-        else {
-        }
-        res.sendStatus(200);
-    });
-}
-// =================================================================================|||||||||||||||||||||||||||||||||||||||||||||||||||||||
-function handleWebhookDataTest(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-        let body = req.body;
-        console.log(req.body, 'body');
-        if (body.object === "page") {
-            console.log(body.object, 'page');
-            let entry = body.entry[0];
-            console.log(entry);
-            const automation = [
-                {
-                    "_id": "67dfee3d15b0db6324a11f80",
-                    "userId": "EX01318048544",
-                    "pageId": "526106077262052",
-                    "postId": "526106077262052_122096294606799816",
-                    "postImageUrl": "https://scontent.fdac175-1.fna.fbcdn.net/v/t39.30808-6/481970325_122096294570799816_7420235339577629533_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFGxeMXmVAfgHJbfq1sgmo9iSrLDztsVS2JKssPO2xVLcPi_pu4I55b6KlaFVJurFFmrDKZuQBSXaen3mzsi41t&_nc_ohc=wlGk_c7NILQQ7kNvgHpzz2a&_nc_oc=AdllhKlxUE6iv-2X8rhmCmBwTnSmQwRarOltFYUL12tY5OSh7FGtJj6Zb0YDKN7iG4w&_nc_zt=23&_nc_ht=scontent.fdac175-1.fna&edm=AKK4YLsEAAAA&_nc_gid=pzMYpgxGIGE5nc6NmRZcBw&oh=00_AYFAE5T69vFwcbzMlh_OqO69OjzoRvCCgC3PYIyi9Vlekg&oe=67E5CD5A",
-                    "postUrl": "https://www.facebook.com/122096578580799816/posts/122096294606799816",
-                    "keywords": [
-                        "pp",
-                        "price"
-                    ],
-                    "commentReplies": [
-                        "Check inbox! 🚀",
-                        "Check inbox! 🚀"
-                    ],
-                    "outOfStockReplies": [
-                        "Sorry product is no longer available",
-                        "Sorry product is no longer available"
-                    ],
-                    "automationType": "Product_automation",
-                    "productsIds": [
-                        "67dfea5747fb8dcfc0fe2c8c"
-                    ],
-                    "createdAt": "2025-03-23T11:19:25.795Z",
-                    "updatedAt": "2025-03-23T11:19:25.795Z",
-                    "__v": 0
-                }
-            ];
-            let userId = (_a = automation[0]) === null || _a === void 0 ? void 0 : _a.userId;
-            let pageId = (_b = automation[0]) === null || _b === void 0 ? void 0 : _b.pageId;
-            let replies = (_c = automation[0]) === null || _c === void 0 ? void 0 : _c.commentReplies;
-            let outOfStockReplies = (_d = automation[0]) === null || _d === void 0 ? void 0 : _d.outOfStockReplies;
-            let automationType = (_e = automation[0]) === null || _e === void 0 ? void 0 : _e.automationType;
-            let productsIds = (_f = automation[0]) === null || _f === void 0 ? void 0 : _f.productsIds;
-            let keywords = (_g = automation[0]) === null || _g === void 0 ? void 0 : _g.keywords;
-            //    ======================================= check if comment has any  keyword ===========================
-            let replyMessageArray = replies;
-            if (automationType == 'Product_automation') {
-                let isStockAvailable = yield (0, endpoint_helper_1.checkProductStock)(productsIds);
-                console.log(isStockAvailable, 'isStockAvailable ||||||||||');
-                if (!isStockAvailable) {
-                    replyMessageArray = outOfStockReplies;
-                }
-            }
-            // ========= find user account for access token======================================
-            let accountData = yield accounts_model_1.default.find({ userId });
-            console.log(accountData, "accountData |||||||||||||||");
-            let account_accessToken = (_h = accountData[0]) === null || _h === void 0 ? void 0 : _h.accessToken;
-            // ================ get all pages with page access token=============================
-            let pageData = (_k = (_j = accountData[0]) === null || _j === void 0 ? void 0 : _j.pages) === null || _k === void 0 ? void 0 : _k.find(item => item.id == pageId);
-            console.log(pageData, "pageData |||||||||||||||");
-            const pageAccessToken = pageData === null || pageData === void 0 ? void 0 : pageData.access_token;
-            // const pageData = await getPagesToken(accessToken, pageId)
-            // const pageAccessToken = pageData?.access_token
-            // ============================== reply to comment===================================
-            // let randomReplyMessage = getRandomItem(replyMessageArray)
-            // const result = await replyToComment(pageAccessToken as string, comment_id, randomReplyMessage)
-            // console.log(result, '||||||||||||| result ++++++++++++++++++ |||||||||||||||')
-            //=============================== send product details message =====================
-            const messageResult = yield (0, endpoint_helper_1.sendProductDetailsMessage)(pageAccessToken, '10055868537762277', productsIds);
-            console.log(messageResult, ' messageResult||||||||||||| ++++++++++++++++++ |||||||||||||||');
         }
         else {
         }

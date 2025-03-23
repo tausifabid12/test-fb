@@ -94,13 +94,12 @@ const getProductDetailsFromIds = (productIds) => __awaiter(void 0, void 0, void 
         throw error;
     }
 });
-function sendProductDetailsMessage(pageAccessToken, recipientId, productIds) {
+function sendProductDetailsMessage(pageAccessToken, comment_id, productIds) {
     return __awaiter(this, void 0, void 0, function* () {
         const products = yield getProductDetailsFromIds(productIds);
-        console.log(products, '||||||||||||||||||| ++++++++++++++=============================>>>>>>>>>>>>>>>>>>>');
         const payload = {
             "recipient": {
-                "id": recipientId
+                "comment_id": comment_id
             },
             "message": {
                 "attachment": {
@@ -135,18 +134,14 @@ function sendProductDetailsMessage(pageAccessToken, recipientId, productIds) {
                 }
             }
         };
-        console.log(payload, 'PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP  -- payload');
         const res = yield fetch(`https://graph.facebook.com/v15.0/me/messages?access_token=${pageAccessToken}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                message: payload
-            })
+            body: JSON.stringify(payload)
         });
         const result = yield res.json();
-        console.log(result, '|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
         if (!result || !result.id) {
             throw new Error("Invalid response format");
         }
