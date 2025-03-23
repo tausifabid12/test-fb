@@ -38,12 +38,16 @@ function verifyWebhook(req, res) {
 function handleWebhookData(req, res) {
     console.log('here ++++++++++++++++++++++++++++++++++++++++++++++++ |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
     let body = req.body;
+    console.log(req.body, 'body');
     if (body.object === "page") {
+        console.log(body.object, 'page');
         body.entry.forEach((entry) => __awaiter(this, void 0, void 0, function* () {
             var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11;
+            console.log(entry, 'page      ++++++++++++ entry');
             // *********************************** Comment Automation Process start ***********************************************
             if (entry.changes && ((_a = entry.changes) === null || _a === void 0 ? void 0 : _a.length)) {
                 let webhookEvent = entry.changes[0];
+                console.log(webhookEvent, 'page      ++++++++++++ entry');
                 if ((webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.field) == 'feed' && ((_b = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _b === void 0 ? void 0 : _b.item) == 'comment') {
                     let customerId = (_d = (_c = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _c === void 0 ? void 0 : _c.from) === null || _d === void 0 ? void 0 : _d.id;
                     let customerName = (_f = (_e = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _e === void 0 ? void 0 : _e.from) === null || _f === void 0 ? void 0 : _f.name;
