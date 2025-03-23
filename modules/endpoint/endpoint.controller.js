@@ -36,6 +36,7 @@ function verifyWebhook(req, res) {
 }
 // // Handle Webhook Data (Page Events)
 function handleWebhookData(req, res) {
+    console.log('here ++++++++++++++++++++++++++++++++++++++++++++++++ |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
     let body = req.body;
     if (body.object === "page") {
         body.entry.forEach((entry) => __awaiter(this, void 0, void 0, function* () {
@@ -154,16 +155,16 @@ function handleWebhookData(req, res) {
                             "senderProfileId": senderId,
                             "senderName": "Alice Smith",
                             messages: [...oldMessages,
-                                {
-                                    messageText: message,
-                                    imageUrl: "",
-                                    videoUrl: "",
-                                    type: "text",
-                                    messageId: messageId,
-                                    isSeen: false,
-                                    time: time,
-                                    echo: false
-                                }]
+                            {
+                                messageText: message,
+                                imageUrl: "",
+                                videoUrl: "",
+                                type: "text",
+                                messageId: messageId,
+                                isSeen: false,
+                                time: time,
+                                echo: false
+                            }]
                         };
                         yield message_model_1.default.findByIdAndUpdate((_11 = oldMessageData[0]) === null || _11 === void 0 ? void 0 : _11._id, messageData, { new: true });
                     }
