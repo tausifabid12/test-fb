@@ -17,6 +17,7 @@ exports.getPagesToken = getPagesToken;
 exports.replyToComment = replyToComment;
 exports.checkProductStock = checkProductStock;
 exports.sendProductDetailsMessage = sendProductDetailsMessage;
+exports.containsKeyword = containsKeyword;
 const product_model_1 = __importDefault(require("../product/product.model"));
 function getPages(accessToken) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -152,4 +153,8 @@ function sendProductDetailsMessage(pageAccessToken, recipientId, productIds) {
             message_id: result.message_id,
         };
     });
+}
+// ============= check keyword
+function containsKeyword(keywords, text) {
+    return keywords.some(keyword => text.toLowerCase().includes(keyword.toLowerCase()));
 }
