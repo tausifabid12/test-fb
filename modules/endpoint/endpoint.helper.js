@@ -97,6 +97,7 @@ const getProductDetailsFromIds = (productIds) => __awaiter(void 0, void 0, void 
 function sendProductDetailsMessage(pageAccessToken, recipientId, productIds) {
     return __awaiter(this, void 0, void 0, function* () {
         const products = yield getProductDetailsFromIds(productIds);
+        console.log(products, '||||||||||||||||||| ++++++++++++++=============================>>>>>>>>>>>>>>>>>>>');
         const payload = {
             "recipient": {
                 "id": recipientId
