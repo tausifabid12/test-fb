@@ -51,6 +51,7 @@ function handleWebhookData(req, res) {
                     let post_id = (_j = webhookEvent === null || webhookEvent === void 0 ? void 0 : webhookEvent.value) === null || _j === void 0 ? void 0 : _j.post_id;
                     //============= find automation
                     const automation = yield automation_model_1.default.find({ postId: post_id });
+                    console.log(automation, 'automation +++++++++++++++++++++++++++');
                     let userId = (_k = automation[0]) === null || _k === void 0 ? void 0 : _k.userId;
                     let pageId = (_l = automation[0]) === null || _l === void 0 ? void 0 : _l.pageId;
                     let replies = (_m = automation[0]) === null || _m === void 0 ? void 0 : _m.commentReplies;
@@ -61,16 +62,18 @@ function handleWebhookData(req, res) {
                     let replyMessageArray = replies;
                     if (automationType == 'Product_automation') {
                         let isStockAvailable = (0, endpoint_helper_1.checkProductStock)(productsIds);
-                        console.log(isStockAvailable, 'accountData');
+                        console.log(isStockAvailable, 'isStockAvailable ||||||||||');
                         if (!isStockAvailable) {
                             replyMessageArray = outOfStockReplies;
                         }
                     }
                     // ========= find user account for access token======================================
                     let accountData = yield accounts_model_1.default.find({ userId });
+                    console.log(accountData, "accountData |||||||||||||||");
                     let account_accessToken = (_s = accountData[0]) === null || _s === void 0 ? void 0 : _s.accessToken;
                     // ================ get all pages with page access token=============================
                     let pageData = (_u = (_t = accountData[0]) === null || _t === void 0 ? void 0 : _t.pages) === null || _u === void 0 ? void 0 : _u.find(item => item.id == pageId);
+                    console.log(pageData, "pageData |||||||||||||||");
                     const pageAccessToken = pageData === null || pageData === void 0 ? void 0 : pageData.access_token;
                     // const pageData = await getPagesToken(accessToken, pageId)
                     // const pageAccessToken = pageData?.access_token
@@ -79,7 +82,8 @@ function handleWebhookData(req, res) {
                     const result = yield (0, endpoint_helper_1.replyToComment)(pageAccessToken, comment_id, randomReplyMessage);
                     //=============================== send product details message =====================
                     const messageResult = yield (0, endpoint_helper_1.sendProductDetailsMessage)(pageAccessToken, customerId, productsIds);
-                    console.log(result, '||||||||||||| ++++++++++++++++++ |||||||||||||||', messageResult);
+                    console.log(result, '||||||||||||| result ++++++++++++++++++ |||||||||||||||');
+                    console.log(messageResult, ' messageResult||||||||||||| ++++++++++++++++++ |||||||||||||||');
                     // ==================== save commenter as a lead
                     let leadsData = yield leads_model_1.default.find({ profileId: customerId });
                     if (leadsData && ((_v = leadsData[0]) === null || _v === void 0 ? void 0 : _v._id)) {
